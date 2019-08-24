@@ -1,0 +1,89 @@
+#include "AVL.h"
+
+//获取树的高度
+template <typename T>
+int AVL<T>::height(AVLnode<T> *node)
+{
+    int h = 0;
+    if (node != nullptr)
+    {
+        int lh = height(node->lchild);
+        int rh = height(node->rchild);
+
+        h = std::max(lh, rh) + 1;
+    }
+    return h;
+}
+//获取左右子树的高度差
+template <typename T>
+int AVL<T>::diff(AVLnode<T> *node)
+{
+    int lh = height(node->lchild);
+    int rh = height(node->rchild);
+
+    return lh - rh;
+}
+//rr旋转 parent指定是平衡因子失衡的节点
+//返回调整后的子树的根
+template <typename T>
+AVLnode<T> *AVL<T>::rr_rotation(AVLnode<T> *parent)
+{
+    // avl *t;
+    // t = parent->r;
+
+    // parent->r = t->l;
+    // t->l = parent;
+    // cout << "Right-Right Rotation";
+    // return t;
+
+    //比如
+    /*
+        ----2----
+        |       |
+        1       3---- -2 parrent          ----4----
+                    |                     |        |
+                    4----  -1 node        3        5
+                        |
+                        5   0
+    */
+    //失衡节点
+    AVLnode<T> *node = parent->rchild;
+
+    //这条不太懂 为什么不是 parent->rchild=nullptr
+    /*
+        当平衡因子被打破的节点距离插入的节点并非为2时(即不接近),会出现
+        parent-rchild需要挂上node->left的情况
+    */
+    parent->rchild=node->lchild;
+    node->lchild=parent;
+    return node;
+}
+//ll旋转 parent指定是平衡因子失衡的节点
+//返回调整后的子树的根
+template <typename T>
+AVLnode<T> *AVL<T>::ll_rotation(AVLnode<T> *parent)
+{
+    AVLnode<T> * node=parent->lchild;
+
+    //同rr,这里不太懂
+    parent->lchild=node->rchild;
+    node->rchild=parent;
+    return node;
+}
+//lr旋转 parent指定是平衡因子失衡的节点
+//先右旋后左旋
+//返回调整后的子树的根
+template <typename T>
+AVLnode<T> *AVL<T>::lr_rotation(AVLnode<T> *parent)
+{
+    AVLnode<T> * node=parent->lchild;
+    parent->lchild=rr_rotation(node);
+    return ll_rotation(parent);
+}
+template <typename T>
+AVLnode<T> *AVL<T>::rl_rotation(AVLnode<T> *parent)
+{
+    AVLnode<T> * node=parent->rchild;
+    parent->rchild=rr_rotation(node);
+    return ll_rotation(parent);
+}
