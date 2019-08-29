@@ -87,3 +87,28 @@ AVLnode<T> *AVL<T>::rl_rotation(AVLnode<T> *parent)
     parent->rchild=rr_rotation(node);
     return ll_rotation(parent);
 }
+//调整平衡
+template<typename T>
+AVLnode<T> *AVL<T>::balance(AVLnode<T> *node)
+{
+    int bal_factor=diff(node);
+    if (bal_factor>1)//左子树导致不平衡
+    {
+        //这里为什么要用>0而不是==1
+        if (diff(node->lchild)==1)//ll,左旋
+            return ll_rotation(node);
+        else//lr 先右旋后左旋
+            return lr_rotation(node);
+    }
+    else if (bal_factor<-1)//右子树导致不平衡
+    {
+        //同上
+        if (diff(node->rchild)==1)//ll
+        {
+            /* code */
+        }
+        
+    }
+    
+    
+}
