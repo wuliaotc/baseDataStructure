@@ -103,12 +103,37 @@ AVLnode<T> *AVL<T>::balance(AVLnode<T> *node)
     else if (bal_factor<-1)//右子树导致不平衡
     {
         //同上
-        if (diff(node->rchild)==1)//ll
-        {
-            /* code */
-        }
-        
+        if (diff(node->rchild)==-1)//rr
+            return rr_rotation(node);
+        else
+            return rl_rotation(node);
+    } 
+    return node;//如果已经平衡了,返回当前节点 表示该节点已平衡不需要检查
+}
+//向树中插入v
+template<typename T>
+AVLnode<T> *insert(AVLnode<T> * t, T v)
+{
+    //树为空,需要构造
+    if(t==nullptr)
+    {
+        t=new AVLnode<T>;
+        t->lchild=nullptr;
+        t->rchild=nullptr;
+        t->data=v;
+        return t;
     }
-    
-    
+    else if (v<t->data)
+    {
+        t->lchild=insert(t->lchild,v);
+        //调整平衡
+        t=balance(t);
+    }
+    //大于等于意味着该树允许储存多个相同值
+    else if (v>=t->rchild)
+    {
+        t->lchild=insert(t->rchild,v);
+        balance(t);
+    }
+    return t;
 }
