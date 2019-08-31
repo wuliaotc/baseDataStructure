@@ -137,3 +137,41 @@ AVLnode<T> *insert(AVLnode<T> * t, T v)
     }
     return t;
 }
+// //打印一颗倒立的树
+// template<typename T>
+// void AVL<T>::display(AVLnode<T> * t,int d)
+// {
+    
+// }
+//中序遍历
+template<typename T>
+void inorder(AVLnode<T> *node)
+{
+    if (node!=nullptr)
+    {
+        inorder(node->lchild);
+        std::cout<<node->data<<' ';
+        inorder(node->rchild);
+    }
+}
+template<typename T>
+void preorder(AVLnode<T> * node)
+{
+    if (node!=nullptr)
+    {
+        std::cout<<node->data<<' ';
+        preorder(node->lchild);
+        preorder(node->rchild);
+    }
+    
+}
+template<typename T>
+void postorder(AVLnode<T> * node)
+{
+    if(node!=nullptr)
+    {
+        postorder(node->lchild);
+        postorder(node->rchild);
+        std::cout<<node->data<<' ';
+    }
+}

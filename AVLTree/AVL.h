@@ -23,7 +23,7 @@ public:
     AVLnode<T> *rl_rotation(AVLnode<T> *);
     AVLnode<T> *balance(AVLnode<T> *);
     AVLnode<T> *insert(AVLnode<T> *, int);
-    void display(AVLnode<T> *, int);
+    // void display(AVLnode<T> *, int d);
     void inorder(AVLnode<T> *);
     void preorder(AVLnode<T> *);
     void postorder(AVLnode<T> *);
