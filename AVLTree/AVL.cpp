@@ -1,5 +1,5 @@
 #include "AVL.h"
-
+#include <iostream>
 //获取树的高度
 template <typename T>
 int AVL<T>::height(AVLnode<T> *node)
@@ -14,6 +14,11 @@ int AVL<T>::height(AVLnode<T> *node)
     }
     return h;
 }
+// template <typename T>
+// int AVL<T>:: height()
+// {
+//     return AVL<T>::height(AVL<T>::root);
+// }
 //获取左右子树的高度差
 template <typename T>
 int AVL<T>::diff(AVLnode<T> *node)
@@ -54,8 +59,8 @@ AVLnode<T> *AVL<T>::rr_rotation(AVLnode<T> *parent)
         当平衡因子被打破的节点距离插入的节点并非为2时(即不接近),会出现
         parent-rchild需要挂上node->left的情况
     */
-    parent->rchild=node->lchild;
-    node->lchild=parent;
+    parent->rchild = node->lchild;
+    node->lchild = parent;
     return node;
 }
 //ll旋转 parent指定是平衡因子失衡的节点
@@ -63,11 +68,11 @@ AVLnode<T> *AVL<T>::rr_rotation(AVLnode<T> *parent)
 template <typename T>
 AVLnode<T> *AVL<T>::ll_rotation(AVLnode<T> *parent)
 {
-    AVLnode<T> * node=parent->lchild;
+    AVLnode<T> *node = parent->lchild;
 
     //同rr,这里不太懂
-    parent->lchild=node->rchild;
-    node->rchild=parent;
+    parent->lchild = node->rchild;
+    node->rchild = parent;
     return node;
 }
 //lr旋转 parent指定是平衡因子失衡的节点
@@ -76,102 +81,151 @@ AVLnode<T> *AVL<T>::ll_rotation(AVLnode<T> *parent)
 template <typename T>
 AVLnode<T> *AVL<T>::lr_rotation(AVLnode<T> *parent)
 {
-    AVLnode<T> * node=parent->lchild;
-    parent->lchild=rr_rotation(node);
+    AVLnode<T> *node = parent->lchild;
+    parent->lchild = rr_rotation(node);
     return ll_rotation(parent);
 }
 template <typename T>
 AVLnode<T> *AVL<T>::rl_rotation(AVLnode<T> *parent)
 {
-    AVLnode<T> * node=parent->rchild;
-    parent->rchild=rr_rotation(node);
+    AVLnode<T> *node = parent->rchild;
+    parent->rchild = rr_rotation(node);
     return ll_rotation(parent);
 }
 //调整平衡
-template<typename T>
+template <typename T>
 AVLnode<T> *AVL<T>::balance(AVLnode<T> *node)
 {
-    int bal_factor=diff(node);
-    if (bal_factor>1)//左子树导致不平衡
+    int bal_factor = diff(node);
+    if (bal_factor > 1) //左子树导致不平衡
     {
         //这里为什么要用>0而不是==1
-        if (diff(node->lchild)==1)//ll,左旋
+        if (diff(node->lchild) == 1) //ll,左旋
             return ll_rotation(node);
-        else//lr 先右旋后左旋
+        else //lr 先右旋后左旋
             return lr_rotation(node);
     }
-    else if (bal_factor<-1)//右子树导致不平衡
+    else if (bal_factor < -1) //右子树导致不平衡
     {
         //同上
-        if (diff(node->rchild)==-1)//rr
+        if (diff(node->rchild) == -1) //rr
             return rr_rotation(node);
         else
             return rl_rotation(node);
-    } 
-    return node;//如果已经平衡了,返回当前节点 表示该节点已平衡不需要检查
+    }
+    return node; //如果已经平衡了,返回当前节点 表示该节点已平衡不需要检查
 }
 //向树中插入v
-template<typename T>
-AVLnode<T> *insert(AVLnode<T> * t, T v)
+template <typename T>
+AVLnode<T> *insert(AVLnode<T> *t, T v)
 {
     //树为空,需要构造
-    if(t==nullptr)
+    if (t == nullptr)
     {
-        t=new AVLnode<T>;
-        t->lchild=nullptr;
-        t->rchild=nullptr;
-        t->data=v;
+        t = new AVLnode<T>;
+        t->lchild = nullptr;
+        t->rchild = nullptr;
+        t->data = v;
         return t;
     }
-    else if (v<t->data)
+    else if (v < t->data)
     {
-        t->lchild=insert(t->lchild,v);
+        t->lchild = insert(t->lchild, v);
         //调整平衡
-        t=balance(t);
+        t = balance(t);
     }
     //大于等于意味着该树允许储存多个相同值
-    else if (v>=t->rchild)
+    else if (v >= t->rchild)
     {
-        t->lchild=insert(t->rchild,v);
+        t->lchild = insert(t->rchild, v);
         balance(t);
     }
     return t;
 }
+//向树中插入v
+// template <typename T>
+// AVLnode<T> *insert(T v)
+// {
+//     return insert(AVL<T>::root, v);
+// }
 // //打印一颗倒立的树
 // template<typename T>
 // void AVL<T>::display(AVLnode<T> * t,int d)
 // {
-    
+
 // }
 //中序遍历
-template<typename T>
+template <typename T>
 void inorder(AVLnode<T> *node)
 {
-    if (node!=nullptr)
+    if (node != nullptr)
     {
         inorder(node->lchild);
-        std::cout<<node->data<<' ';
+        std::cout << node->data << ' ';
         inorder(node->rchild);
     }
 }
-template<typename T>
-void preorder(AVLnode<T> * node)
+// template <typename T>
+// void inorder()
+// {
+//     inorder(AVL<T>::root);
+// }
+template <typename T>
+void preorder(AVLnode<T> *node)
 {
-    if (node!=nullptr)
+    if (node != nullptr)
     {
-        std::cout<<node->data<<' ';
+        std::cout << node->data << ' ';
         preorder(node->lchild);
         preorder(node->rchild);
     }
-    
 }
-template<typename T>
-void postorder(AVLnode<T> * node)
+// template <typename T>
+// void preorder()
+// {
+//     preorder(AVL<T>::root);
+// }
+template <typename T>
+void postorder(AVLnode<T> *node)
 {
-    if(node!=nullptr)
+    if (node != nullptr)
     {
         postorder(node->lchild);
         postorder(node->rchild);
-        std::cout<<node->data<<' ';
+        std::cout << node->data << ' ';
     }
+}
+// template <typename T>
+// void postorder()
+// {
+//     postorder(AVL<T>::root);
+// }
+
+
+
+// friend
+template<typename T>
+int height(AVL<T> &  t)
+{
+    return t.height(t.root);
+}
+template<typename T>
+void inorder(AVL<T> & t)
+{
+    t.inorder(t.root);
+}
+template<typename T>
+void preorder(AVL<T> & t)
+{
+    t.preorder(t.root);
+}
+template<typename T>
+void postorder(AVL<T> & t)
+{
+    t.postorder(t.root);
+}
+template<typename T>
+AVLnode<T> *insert(AVL<T> & t,T v)
+{
+    t.insert(t.root,v);
 }

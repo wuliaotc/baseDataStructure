@@ -15,6 +15,7 @@ private:
 public:
     //获取(子)树的高度
     int height(AVLnode<T> *);
+    
     //获取子树高度差
     int diff(AVLnode<T> *);
     AVLnode<T> *rr_rotation(AVLnode<T> *);
@@ -22,18 +23,21 @@ public:
     AVLnode<T> *lr_rotation(AVLnode<T> *);
     AVLnode<T> *rl_rotation(AVLnode<T> *);
     AVLnode<T> *balance(AVLnode<T> *);
-    AVLnode<T> *insert(AVLnode<T> *, int);
+    AVLnode<T> *insert(AVLnode<T> *, T);
+    
     // void display(AVLnode<T> *, int d);
     void inorder(AVLnode<T> *);
     void preorder(AVLnode<T> *);
     void postorder(AVLnode<T> *);
-    avlTree()
+    AVL()
     {
-        root = NULL;
+        root=nullptr;
     }
-    AVLnode<T> *root;
-    AVL();
-    ~AVL();
+    friend void inorder(AVL<T> &);
+    friend void preorder(AVL<T> &);
+    friend void postorder(AVL<T> &);
+    friend AVLnode<T> *insert(AVL<T> &,T v);
+    friend int height(AVL<T> &);
 };
 
 #endif // _AVL_TREE_
