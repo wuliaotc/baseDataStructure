@@ -1,6 +1,7 @@
 #if !defined(RBTREE_H_)
 #define RBTREE_H_
 enum Color{RED,BLACK};
+
 struct Node
 {
     //节点储存的值
